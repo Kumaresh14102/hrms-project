@@ -1,0 +1,23 @@
+# Ignore local build artifacts
+.editorconfig
+
+# Ignore local build artifacts
+target/
+dist/
+node_modules/
+
+# Ignore IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore Version Control & Docs
+.git/
+.gitignore
+README.md
+docker-compose.yml
+
+# Ignore OS files
+thumbs.db
+.DS_Store

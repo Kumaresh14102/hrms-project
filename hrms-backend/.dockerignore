@@ -1,0 +1,20 @@
+# Java/Maven specific
+*.jar
+*.war
+*.ear
+.mvn/
+mvnw
+mvnw.cmd
+.metadata/
+bin/
+
+# Testing reports (very common to bloat size)
+**/target/surefire-reports/
+**/target/failsafe-reports/
+*.log
+*.out
+
+# Environment secrets (Safety first!)
+.env
+*.properties
+# (Only ignore properties if you are passing them via Docker environment variables)
