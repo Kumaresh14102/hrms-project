@@ -1,0 +1,84 @@
+# replicas set
+# --- BACKEND DEPLOYMENT ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrms-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hrms-backend
+  template:
+    metadata:
+      labels:
+        app: hrms-backend
+    spec:
+      containers:
+      - name: hrms-backend
+        # image: hrms-backend:latest
+        image: kumaresha/hrms-backend:latest
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 8080
+        env:  # <--- This must be indented exactly under 'ports'
+        - name: SPRING_DATASOURCE_URL
+          # value: "jdbc:postgresql://host.minikube.internal:5432/hrms"
+          value: "jdbc:postgresql://postgres-service:5432/hrms"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "postgres"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "root" 
+        - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+          value: "update"
+---
+# --- BACKEND SERVICE ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrms-backend-service
+spec:
+  type: NodePort 
+  selector:
+    app: hrms-backend
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080  # This "locks" the port to 30080
+---
+# --- FRONTEND DEPLOYMENT ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrms-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hrms-frontend
+  template:
+    metadata:
+      labels:
+        app: hrms-frontend
+    spec:
+      containers:
+      - name: hrms-frontend
+        # image: hrms-frontend:latest
+        image: kumaresha/hrms-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+--- 
+# --- FRONTEND SERVICE ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrms-frontend-service
+spec:
+  type: NodePort 
+  selector:
+    app: hrms-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30001
