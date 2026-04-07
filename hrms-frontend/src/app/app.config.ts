@@ -20,7 +20,27 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled'
       })
     ),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    // provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(
+  withFetch(),
+  withInterceptors([
+    // //  Base URL interceptor (ADD THIS)
+    // (req, next) => {
+    //   if (req.url.startsWith('http')) {
+    //     return next(req);
+    //   }
+
+    //   const newReq = req.clone({
+    //     url: 'http://107.20.60.252:8080' + req.url
+    //   });
+
+    //   return next(newReq);
+    // },
+
+    // Your existing auth interceptor
+    authInterceptor
+  ])
+),
     provideAnimations(),
     provideToastr({
       timeOut: 3000,

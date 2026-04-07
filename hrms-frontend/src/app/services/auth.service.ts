@@ -12,7 +12,7 @@ export class AuthService {
     private http = inject(HttpClient);
     private router = inject(Router);
     private platformId = inject(PLATFORM_ID);
-    private apiUrl = 'http://localhost:8080/api/auth';
+    private apiUrl = '/api/auth';
     private isBrowser = isPlatformBrowser(this.platformId);
 
 

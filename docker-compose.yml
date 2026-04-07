@@ -1,34 +1,80 @@
+# services:
+#   # java
+#   java-base:
+#     build:
+#       context: ./hrms-backend/my-java-base
+#     image: hrms-java-base:17
+
+#   backend:
+#     build: ./hrms-backend
+#     container_name: hrms-backend
+#     image: hrms-backend:latest
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       # Connect to your Windows PostgreSQL
+#       - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/hrms
+#       - SPRING_DATASOURCE_USERNAME=postgres
+#       - SPRING_DATASOURCE_PASSWORD=root
+#       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#     # This replaces the need for the 'db' service
+#     extra_hosts:
+#       - "host.docker.internal:host-gateway"
+#     depends_on:
+#       - java-base
+
+#   frontend:
+#     build: ./hrms-frontend
+#     container_name: hrms-frontend
+#     image: hrms-frontend:latest
+#     ports:
+#       - "4200:80"
+#     # Frontend still depends on the backend container
+#     depends_on:
+#       - backend
+
+
+
+
+version: '3.8'
+
 services:
-  # java
-  java-base:
-    build:
-      context: ./hrms-backend/my-java-base
-    image: hrms-java-base:17
+
+  postgres:
+    image: postgres:latest
+    container_name: hrms-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: hrms
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   backend:
-    build: ./hrms-backend
+    image: kumaresha/hrms-backend:latest
     container_name: hrms-backend
-    image: hrms-backend:latest
+    restart: always
     ports:
       - "8080:8080"
     environment:
-      # Connect to your Windows PostgreSQL
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/hrms
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/hrms
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-    # This replaces the need for the 'db' service
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
-      - java-base
+      - postgres
 
   frontend:
-    build: ./hrms-frontend
+    image: kumaresha/hrms-frontend:latest
     container_name: hrms-frontend
-    image: hrms-frontend:latest
+    restart: always
     ports:
-      - "4200:80"
-    # Frontend still depends on the backend container
+      - "80:80"
     depends_on:
       - backend
+
+volumes:
+  postgres_data:
