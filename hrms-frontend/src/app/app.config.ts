@@ -20,10 +20,10 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled'
       })
     ),
-    // provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    provideHttpClient(
-  withFetch(),
-  withInterceptors([
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+  //   provideHttpClient(
+  // withFetch(),
+  // withInterceptors([
     // //  Base URL interceptor (ADD THIS)
     // (req, next) => {
     //   if (req.url.startsWith('http')) {
@@ -38,9 +38,9 @@ export const appConfig: ApplicationConfig = {
     // },
 
     // Your existing auth interceptor
-    authInterceptor
-  ])
-),
+//     authInterceptor
+//   ])
+// ),
     provideAnimations(),
     provideToastr({
       timeOut: 3000,
